@@ -111,7 +111,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.y > screenHeight:
             self.dead()
     
-    def deathAnimation(self, posX, posY):
+    # def deathAnimation(self, posX, posY):
         
             
             
