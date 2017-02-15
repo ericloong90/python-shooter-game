@@ -19,6 +19,10 @@ TURQOISE = (46, 64, 83)
 # playerY = screenHeight - playerHeight - 20
 currentLevel = 1
 previousTime = 0
+explosionCounter = 0
+explosionX = 0
+explosionY = 0
+animation_frames = []
 enemies = []
 enemySpritesList = pygame.sprite.Group()
 pixelGroup = pygame.sprite.Group()
@@ -46,6 +50,7 @@ player = Player()
 playerGroup = pygame.sprite.Group()
 playerGroup.add(player)        
 
+
 class Enemy(pygame.sprite.Sprite):
     countCurrent = 0
     countMax = 5
@@ -68,6 +73,8 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.enemyWidth = self.image.get_width()
         self.enemyHeight = self.image.get_height()
+        self.midX = 0
+        self.midY = 0
         self.x = random.randint(self.enemyWidth, screenWidth) - self.enemyWidth
         self.y = 0 - self.enemyHeight
         enemySpritesList.add(self)
@@ -111,11 +118,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.y > screenHeight:
             self.dead()
     
-    # def deathAnimation(self, posX, posY):
-        
-            
-            
-            
+    # def deathAnimation(self, posX, posY):           
 
     def dead(self):
         if Enemy.countCurrent != 0:
@@ -124,7 +127,17 @@ class Enemy(pygame.sprite.Sprite):
             # enemySpritesList.remove(self)
 
 
+def explosion(frameWidth, frameHeight):
+    # timer = pygame.time.Clock()
+    # screen = pygame.display.set_mode( ( 400, 400 ), 0, 32 )
+    image = pygame.image.load( "./assets/Explosion-21.png" )
+    width, height = image.get_size()
 
+    for i in range(int(width / frameWidth)):
+        animation_frames.append(image.subsurface((i * frameWidth, 0, frameWidth, frameHeight)))
+    explosionCounter = 0
+
+explosion(250, 250)
 
 while True:
     for event in pygame.event.get():
@@ -164,12 +177,24 @@ while True:
     collisionList = pygame.sprite.spritecollide(player, enemySpritesList, True)
     for sprite in collisionList:
         sprite.dead()
-        
-        
+        explosionX = sprite.rect.x + sprite.image.get_width() - 150
+        explosionY = sprite.rect.y + sprite.image.get_height() - 150
+        explosionCounter = 0
+
     enemySpritesList.update()    
     # player.rect.x = player.playerX
     # player.rect.y = Player.playerY 
     screen.fill(TURQOISE)
+
+    if (collisionList or (0 < explosionCounter <= 19)):
+        screen.blit(animation_frames[explosionCounter], (explosionX, explosionY))
+        explosionCounter += 1
+        print(explosionCounter)
+        pygame.display.update()
+    else:
+        explosionCounter = 0
+        print(explosionCounter)
+
     playerGroup.draw(screen)
     enemySpritesList.draw(screen)
     # screen.blit(player, (player.rect.x, player.rect.y))
