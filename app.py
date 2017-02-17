@@ -130,7 +130,7 @@ class Enemy(pygame.sprite.Sprite):
 def explosion(frameWidth, frameHeight):
     # timer = pygame.time.Clock()
     # screen = pygame.display.set_mode( ( 400, 400 ), 0, 32 )
-    image = pygame.image.load( "./assets/Explosion-21.png" )
+    image = pygame.image.load("./assets/Explosion-22.png").convert_alpha()
     width, height = image.get_size()
 
     for i in range(int(width / frameWidth)):
@@ -189,11 +189,9 @@ while True:
     if (collisionList or (0 < explosionCounter <= 19)):
         screen.blit(animation_frames[explosionCounter], (explosionX, explosionY))
         explosionCounter += 1
-        print(explosionCounter)
         pygame.display.update()
     else:
         explosionCounter = 0
-        print(explosionCounter)
 
     playerGroup.draw(screen)
     enemySpritesList.draw(screen)
