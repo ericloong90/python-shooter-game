@@ -6,6 +6,11 @@ import time
 import math
 
 pygame.init()
+pygame.mixer.init()
+sound1 = pygame.mixer.Sound('./assets/grenade.wav')
+sound2 = pygame.mixer.Sound('./assets/grenade2.wav')
+sound3 = pygame.mixer.Sound('./assets/grenade3.wav')
+explosionSounds = [sound1, sound2, sound3]
 screenWidth = 400
 screenHeight = 600
 screenSize = (screenWidth, screenHeight)
@@ -26,6 +31,7 @@ animation_frames = []
 enemies = []
 enemySpritesList = pygame.sprite.Group()
 pixelGroup = pygame.sprite.Group()
+
 
 class Player(pygame.sprite.Sprite):
     # player = pygame.image.load('./assets/player.png').convert_alpha()
@@ -123,6 +129,7 @@ class Enemy(pygame.sprite.Sprite):
     def dead(self):
         if Enemy.countCurrent != 0:
             Enemy.countCurrent -= 1
+            random.choice(explosionSounds).play()
             # enemies.remove(self)
             # enemySpritesList.remove(self)
 
